@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Dados locais do app (banco com configurações do usuário, prints, etc.)
+dados_locais/
+
+# Calibração visual (prints de calibração específicos de cada máquina)
+calibracao/
+
+# IDE / sistema
+.vscode/
+.idea/
+.DS_Store
+
+# opencode
+.opencode/
