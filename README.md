@@ -160,3 +160,9 @@ venv/bin/python -m unittest tests.test_inventario_mods -v
 - Nenhuma credencial é armazenada: as vendas são feitas pelo navegador com a
   sua conta. O banco local (`dados_locais/`) guarda apenas preços e suas
   configurações.
+
+## Licença
+
+Licença **MIT** — você pode usar, modificar e distribuir livremente, **desde
+que mantenha o aviso de copyright e a permissão** (dando os créditos ao autor).
+Veja o arquivo [`LICENSE`](LICENSE).
