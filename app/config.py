@@ -189,6 +189,8 @@ def _procurar_ee_log() -> Path | None:
             raizes += list(origem.glob("*/*/Steam/steamapps"))
 
     vistos: set[str] = set()
+    candidatos: list[tuple[Path, float]] = []  # (EE.log, data de modificação)
+    sem_log: Path | None = None                # jogo instalado, log ainda não criado
     for raiz in raizes:
         try:
             real = str(raiz.resolve())
@@ -197,10 +199,28 @@ def _procurar_ee_log() -> Path | None:
         if real in vistos:
             continue
         vistos.add(real)
-        candidato = raiz / _SUFIXO_EE_LOG
-        if candidato.exists():
-            return candidato
-    return None
+
+        # Só bibliotecas que TÊM o jogo instalado contam. Sem isso, o glob
+        # pode achar um EE.log velho de uma instalação antiga que sobrou em
+        # outra pasta e o leitor seguia um arquivo morto (gatilho nunca
+        # disparava). O appmanifest confirma onde o jogo mora.
+        if not (raiz / f"appmanifest_{_APPID_WARFRAME_STEAM}.acf").exists():
+            continue
+
+        caminho_log = raiz / _SUFIXO_EE_LOG
+        try:
+            if caminho_log.exists():
+                candidatos.append((caminho_log, caminho_log.stat().st_mtime))
+            elif sem_log is None:
+                sem_log = caminho_log
+        except OSError:
+            continue
+
+    if candidatos:
+        # Prefere o log mais recente (o jogo pode ter sido movido entre
+        # bibliotecas e o log antigo ficar pra trás).
+        return max(candidatos, key=lambda par: par[1])[0]
+    return sem_log
 
 
 CAMINHO_EE_LOG = _procurar_ee_log()
