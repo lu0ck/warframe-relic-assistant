@@ -4,16 +4,20 @@ Bandeja do sistema (Fase 8).
 Ícone no tray com: Abrir (janela principal), Atualizar banco agora,
 Configurações e Sair. Criado em app/main.py.
 """
-from PySide6.QtCore import QByteArray
-from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon, QMessageBox
+from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 from PySide6.QtGui import QIcon, QPixmap, QPainter, QColor, QPainterPath
 
+from app import config
 from app.config import NOME_APP
 
 
-def _icone_app() -> QIcon:
-    """Gera um ícone simples do app em runtime: um losango ciano sobre
-    fundo escuro, evitando precisar de um arquivo .png/.svg no repo."""
+def icone_app() -> QIcon:
+    """Ícone do app: usa o arquivo icones/assistente-reliquias.svg se existir;
+    senão gera em runtime um losango ciano sobre fundo escuro."""
+    svg = config.RAIZ_PROJETO / "icones" / "assistente-reliquias.svg"
+    if svg.exists():
+        return QIcon(str(svg))
+
     tamanho = 64
     pix = QPixmap(tamanho, tamanho)
     pix.fill(QColor(0, 0, 0, 0))
@@ -42,7 +46,7 @@ def _icone_app() -> QIcon:
 class Bandeja:
     def __init__(self, ao_abrir, ao_atualizar, ao_configurar, ao_sair):
         self._ao_abrir = ao_abrir
-        self._tray = QSystemTrayIcon(_icone_app(), None)
+        self._tray = QSystemTrayIcon(icone_app(), None)
         self._tray.setToolTip(NOME_APP)
 
         menu = QMenu()

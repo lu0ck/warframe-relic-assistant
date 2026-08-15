@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QApplication
 from app import config
 from app.dados import cache
 from app.ui.janela_principal import ABA_CONFIGURACAO, JanelaPrincipal
-from app.ui.bandeja import Bandeja
+from app.ui.bandeja import Bandeja, icone_app
 from app.ui.tema import aplicar_tema
 from app.automacao.hotkey import OuvinteHotkey
 from app.automacao.fluxo_captura import FluxoDeCaptura
@@ -27,6 +27,7 @@ class PonteHotkey(QObject):
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName(config.NOME_APP)
+    app.setWindowIcon(icone_app())
     aplicar_tema(app)
 
     cache.criar_tabelas()
@@ -115,8 +116,8 @@ def main():
         janela.abrir_na_aba(ABA_CONFIGURACAO)
 
     def ao_sair():
-        janela.fechar_para_bandeja()
-        app.quit()
+        # Fechar a janela encerra o app (closeEvent aceita e para as threads).
+        janela.close()
 
     tray = Bandeja(
         ao_abrir=ao_abrir,
@@ -125,7 +126,6 @@ def main():
         ao_sair=ao_sair,
     )
     tray.mostrar()
-    janela._tray = tray
 
     iniciar_ouvinte()
 

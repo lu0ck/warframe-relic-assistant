@@ -27,8 +27,8 @@ no jogo.
   valor por conjunto e merge no inventário geral.
 - **Mods** (OCR da tela de Mods): varredura da grade com deduplicação por mod,
   preço atual, resumo e merge no inventário geral.
-- **Bandeja do sistema**: fecha pra bandeja, atualização do banco na hora e
-  ícone de configurações.
+- **Bandeja do sistema**: ícone enquanto o app está em uso, com atalhos de
+  atualizar banco e configurações.
 
 ## Requisitos
 
@@ -57,27 +57,37 @@ source venv/bin/activate
 python -m app.main
 ```
 
-O app abre a janela principal e vai pra **bandeja do sistema**. Na primeira
-execução ele baixa os preços atuais (584 itens, ~5-7 min) — acompanhe na aba
-**Overlay**. Depois é só jogar: o overlay aparece sozinho (ou com **Home**).
+O app abre a janela principal e aparece na **bandeja do sistema** enquanto
+está em uso. Na primeira execução ele baixa os preços atuais (584 itens,
+~5-7 min) — acompanhe na aba **Overlay**. Depois é só jogar: o overlay aparece
+sozinho (ou com **Home**).
 
 ## Usando como app do sistema
 
-- **Fechar a janela** minimiza pra bandeja — o app continua rodando em
-  segundo plano (overlay, gatilho automático e atualização diária).
-- Pra **sair de verdade**, clique com o botão direito no ícone da bandeja →
-  **Sair**.
-- Pra **iniciar com o sistema**, crie um arquivo de autostart:
+O app é um programa **normal**: abre quando você quer usar e encerra quando
+você fecha.
+
+- Abra pelo **menu de aplicativos** (procure por "Assistente de Relíquias",
+  com o ícone de relíquia) ou rode `./iniciar.sh`.
+- Enquanto está aberto, ele aparece na **bandeja** (perto do relógio) com
+  atalhos rápidos: Abrir, Atualizar banco agora, Configurações e Sair.
+- **Fechar a janela encerra o app de verdade** — ele não fica rodando em
+  segundo plano consumindo recursos. O ícone da bandeja some junto.
+- Quer usar de novo? Abra pelo menu novamente.
+
+Para aparecer no menu de aplicativos, instale a entrada `.desktop`:
 
 ```bash
-cat > ~/.config/autostart/assistente-reliquias.desktop <<EOF
+cat > ~/.local/share/applications/assistente-reliquias.desktop <<EOF
 [Desktop Entry]
 Type=Application
 Name=Assistente de Relíquias
 Exec=/caminho/para/o/projeto/iniciar.sh
-X-GNOME-Autostart-enabled=true
+Icon=/caminho/para/o/projeto/icones/assistente-reliquias.svg
+Terminal=false
+Categories=Utility;Game;
 EOF
-chmod +x ~/.config/autostart/assistente-reliquias.desktop
+chmod +x ~/.local/share/applications/assistente-reliquias.desktop
 ```
 
 (substitua `/caminho/para/o/projeto` pelo caminho real da pasta.)

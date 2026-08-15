@@ -72,8 +72,6 @@ class JanelaPrincipal(QMainWindow):
         layout_container.setContentsMargins(0, 0, 0, 0)
         layout_container.addWidget(self.abas)
         self.setCentralWidget(container)
-        self._sair = False
-        self._tray = None
 
         # Garante que a aba histórico abre com a visão mais fresca —
         # protege contra qualquer caso de a aba ser mostrada sem update.
@@ -92,20 +90,10 @@ class JanelaPrincipal(QMainWindow):
         self.raise_()
         self.activateWindow()
 
-    def fechar_para_bandeja(self):
-        """Fecha de verdade o app (chamado pelo item 'Sair' da bandeja)."""
-        self._sair = True
-        self.close()
-
     def closeEvent(self, evento):
-        # Para as varreduras (inventário e mods) antes de fechar — QThread
-        # destruído ativo é erro.
+        # Para as varreduras (inventário e mods) e a atualização do banco
+        # antes de fechar — QThread destruído ativo é erro.
         self.aba_inventario.parar_varredura()
         self.aba_mods.parar_varredura()
         self.aba_overlay.parar_atualizacao()
-        # Com a bandeja ativa, fechar a janela só oculta pro tray.
-        if not self._sair and getattr(self, "_tray", None) is not None:
-            evento.ignore()
-            self.hide()
-            return
         super().closeEvent(evento)
