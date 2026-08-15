@@ -16,12 +16,12 @@ from app.ui.aba_mods import AbaMods
 # ajuste esses índices junto.
 ABA_OVERLAY = 0
 ABA_HISTORICO = 1
-ABA_ITENS = 2
-ABA_MODS_PRECOS = 3
-ABA_INVENTARIO = 4
-ABA_CALIBRACAO = 5
-ABA_CONFIGURACAO = 6
-ABA_MODS = 7
+ABA_INVENTARIO = 2
+ABA_ITENS = 3
+ABA_MODS = 4
+ABA_MODS_PRECOS = 5
+ABA_CALIBRACAO = 6
+ABA_CONFIGURACAO = 7
 
 
 class JanelaPrincipal(QMainWindow):
@@ -60,12 +60,12 @@ class JanelaPrincipal(QMainWindow):
 
         self.abas.addTab(self.aba_overlay, "Overlay")
         self.abas.addTab(self.aba_historico, "Histórico")
-        self.abas.addTab(self.aba_itens, "Itens Prime")
-        self.abas.addTab(self.aba_precos_mods, "Mods Preços")
         self.abas.addTab(self.aba_inventario, "Inventário")
+        self.abas.addTab(self.aba_itens, "Itens Prime")
+        self.abas.addTab(self.aba_mods, "Mods")
+        self.abas.addTab(self.aba_precos_mods, "Mods Preços")
         self.abas.addTab(self.aba_calibracao, "Calibração")
         self.abas.addTab(self.aba_configuracao, "Configurações")
-        self.abas.addTab(self.aba_mods, "Mods")
 
         container = QWidget()
         layout_container = QVBoxLayout(container)

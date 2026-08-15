@@ -124,16 +124,17 @@ OCR não estiver lendo os nomes na sua resolução:
 
 ## Janela principal (8 abas)
 
-- **Overlay:** status do banco de preços e botão de atualização forçada.
+- **Overlay:** status do banco de preços (peças Prime + mods) e botão de
+  atualização forçada.
 - **Histórico:** sessões de abertura agrupadas por dia.
-- **Itens Prime:** consulta das peças Prime com preço e ducados.
-- **Mods Preços:** preços de mods no cache do warframe.market.
 - **Inventário:** varredura da tela de vendas/Inventory.
+- **Itens Prime:** consulta das peças Prime com preço e ducados.
+- **Mods:** inventário de mods (Fase Mods, abaixo).
+- **Mods Preços:** preços de mods no cache do warframe.market.
 - **Calibração:** ajuste visual da faixa de nomes.
 - **Configurações:** hotkey, monitor do overlay, duração, nome da janela do
   jogo, gatilho automático (liga/desliga, atraso e caminho do `EE.log`),
   pasta dos prints e posição do overlay.
-- **Mods:** inventário de mods (Fase Mods, abaixo).
 
 ### Fase Mods — inventário de mods
 

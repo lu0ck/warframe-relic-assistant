@@ -394,6 +394,11 @@ def contar_itens_no_cache() -> int:
         return conexao.execute("SELECT COUNT(*) AS total FROM itens_cache").fetchone()["total"]
 
 
+def contar_mods_no_cache() -> int:
+    with conectar() as conexao:
+        return conexao.execute("SELECT COUNT(*) AS total FROM mods_cache").fetchone()["total"]
+
+
 def buscar_slug_por_nome(nome: str) -> str | None:
     """Resolve o slug de um item pelo nome (match EXATO apenas).
 

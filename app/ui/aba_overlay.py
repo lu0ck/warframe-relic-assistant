@@ -146,13 +146,17 @@ class AbaOverlay(QWidget):
 
     def verificar_e_atualizar_se_necessario(self):
         total = cache.contar_itens_no_cache()
+        total_mods = cache.contar_mods_no_cache()
         # A rotina diária baixa peças Prime E mods — dispara se qualquer um
         # dos dois estiver defasado.
         if cache.precisa_atualizar_hoje() or cache.precisa_atualizar_mods_hoje():
             self.iniciar_atualizacao()
         else:
             ultima = cache.data_da_ultima_atualizacao()
-            self.status_cache.setText(f"● Banco em dia ({total} itens, atualizado em {ultima})")
+            self.status_cache.setText(
+                f"● Banco em dia ({total} peças Prime + {total_mods} mods, "
+                f"atualizado em {ultima})"
+            )
 
     def iniciar_atualizacao(self):
         if self._thread_atualizacao is not None and self._thread_atualizacao.isRunning():
