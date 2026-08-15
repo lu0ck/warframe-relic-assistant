@@ -10,4 +10,8 @@ if [ ! -d "$DIR/venv" ]; then
   exit 1
 fi
 
+# O menu de aplicativos abre o app com o diretório de trabalho no $HOME; o
+# módulo `app` só é encontrado com o projeto no cwd. Vamos pra raiz do projeto.
+cd "$DIR"
+
 exec "$DIR/venv/bin/python" -m app.main
