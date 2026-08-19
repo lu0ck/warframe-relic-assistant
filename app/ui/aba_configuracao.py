@@ -156,6 +156,22 @@ class AbaConfiguracao(QWidget):
         botao_escolher_pasta.setCursor(Qt.CursorShape.PointingHandCursor)
         botao_escolher_pasta.clicked.connect(self._escolher_pasta_prints)
         layout_prints.addWidget(botao_escolher_pasta, alignment=Qt.AlignmentFlag.AlignRight)
+
+        self._opcoes_retencao = [
+            (1, "1 dia"),
+            (3, "3 dias"),
+            (7, "7 dias"),
+            (14, "14 dias"),
+            (21, "21 dias"),
+            (30, "30 dias"),
+            (60, "60 dias"),
+            (90, "90 dias"),
+            (0, "Nunca apagar"),
+        ]
+        self.campo_retencao_prints = QComboBox()
+        for valor, texto in self._opcoes_retencao:
+            self.campo_retencao_prints.addItem(texto, valor)
+        form_prints.addRow("Apagar prints após", self.campo_retencao_prints)
         layout_prints.addLayout(form_prints)
         layout.addWidget(cartao_prints)
 
@@ -231,6 +247,20 @@ class AbaConfiguracao(QWidget):
             cache.obter_config("pasta_prints") or ""
         )
 
+        retencao = cache.obter_config(
+            "retention_prints_dias",
+            str(config_do_app.PADRAO_RETENCAO_PRINTS_DIAS),
+        )
+        try:
+            retencao_int = int(retencao)
+        except (TypeError, ValueError):
+            retencao_int = config_do_app.PADRAO_RETENCAO_PRINTS_DIAS
+        idx_retencao = next(
+            (i for i, (v, _) in enumerate(self._opcoes_retencao) if v == retencao_int),
+            5,  # índice do padrão (30 dias)
+        )
+        self.campo_retencao_prints.setCurrentIndex(idx_retencao)
+
         caminho_ee_log = cache.obter_config("caminho_ee_log")
         if caminho_ee_log:
             self.campo_caminho_ee_log.setText(caminho_ee_log)
@@ -253,6 +283,8 @@ class AbaConfiguracao(QWidget):
         cache.salvar_config(
             "pasta_prints", self.campo_pasta_prints.text().strip()
         )
+        retencao_valor = self.campo_retencao_prints.currentData()
+        cache.salvar_config("retention_prints_dias", str(retencao_valor))
         cache.salvar_config("modo_overlay", self.campo_modo_overlay.currentText())
         cache.salvar_config("overlay_y_frac", str(self.campo_overlay_y_frac.value()))
         cache.salvar_config("caminho_ee_log", self.campo_caminho_ee_log.text().strip())

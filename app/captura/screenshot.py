@@ -8,6 +8,7 @@ lugar errado se a janela não ocupa a tela toda ou não está no canto (0,0).
 Se a janela não for encontrada (xdotool ausente, jogo fechado, etc.), cai
 pro fallback de capturar o monitor inteiro.
 """
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -121,3 +122,36 @@ def salvar_print_captura(imagem: Image.Image) -> str | None:
     except Exception as erro:
         print(f"Aviso: não foi possível salvar o print da captura ({erro}).")
         return None
+
+
+def limpar_prints_antigos(pasta_prints: Path | str, retencao_dias: int) -> int:
+    """Deleta prints com mais de X dias na pasta de capturas.
+
+    Usa a data de modificação do arquivo. Arquivos que não são prints de
+    captura (nomes que não começam com 'reliquias_') são ignorados.
+    Retorna o número de arquivos removidos.
+    """
+    if retencao_dias <= 0:
+        return 0
+    try:
+        pasta = Path(pasta_prints)
+    except (TypeError, ValueError):
+        return 0
+    if not pasta.is_dir():
+        return 0
+
+    agora = time.time()
+    limite = agora - (retencao_dias * 86400)
+    removidos = 0
+    for arquivo in pasta.iterdir():
+        if not arquivo.is_file():
+            continue
+        if not arquivo.name.startswith("reliquias_"):
+            continue
+        try:
+            if arquivo.stat().st_mtime < limite:
+                arquivo.unlink()
+                removidos += 1
+        except OSError:
+            continue
+    return removidos

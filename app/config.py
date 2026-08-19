@@ -21,6 +21,10 @@ NOME_APP = "Assistente de Relíquias"
 # (o usuário pode trocar nas Configurações). Pasta padrão: junto dos dados.
 PADRAO_PASTA_PRINTS = PASTA_DADOS / "prints"
 
+# Retenção de prints: prints com mais de X dias são apagados automaticamente
+# ao iniciar o app (0 = nunca apagar). O usuário pode alterar nas Configurações.
+PADRAO_RETENCAO_PRINTS_DIAS = 30
+
 # Configurações padrão (usadas na primeira execução, antes de existir a tabela `config`)
 PADRAO_HOTKEY = "<home>"
 PADRAO_MONITOR_INDEX = 1  # no mss: 0 = todos combinados, 1 = monitor primário real

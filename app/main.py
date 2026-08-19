@@ -1,5 +1,6 @@
 import signal
 import sys
+from pathlib import Path
 
 from PySide6.QtCore import QObject, QTimer, Signal
 from PySide6.QtWidgets import QApplication
@@ -12,6 +13,7 @@ from app.ui.tema import aplicar_tema
 from app.automacao.hotkey import OuvinteHotkey
 from app.automacao.fluxo_captura import FluxoDeCaptura
 from app.automacao.leitor_log import LeitorDeLog
+from app.captura.screenshot import limpar_prints_antigos
 
 
 class PonteHotkey(QObject):
@@ -31,6 +33,19 @@ def main():
     aplicar_tema(app)
 
     cache.criar_tabelas()
+
+    # Limpa prints antigos na inicialização (se retenção > 0 dias)
+    pasta_prints = cache.obter_config("pasta_prints")
+    pasta_prints = Path(pasta_prints) if pasta_prints else config.PADRAO_PASTA_PRINTS
+    retencao = int(
+        cache.obter_config(
+            "retention_prints_dias", str(config.PADRAO_RETENCAO_PRINTS_DIAS)
+        )
+        or config.PADRAO_RETENCAO_PRINTS_DIAS
+    )
+    removidos = limpar_prints_antigos(pasta_prints, retencao)
+    if removidos:
+        print(f"Limpeza automática: {removidos} print(s) antigo(s) removido(s).")
 
     # Concilia os ✓ do histórico com o inventário geral: sessões gravadas por
     # versões antigas do app registraram o item escolhido sem adicioná-lo ao
